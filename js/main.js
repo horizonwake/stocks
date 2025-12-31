@@ -1,6 +1,6 @@
 import { getTickerOverview, getNewsForTicker } from "./api.js";
-import { renderNewsCard } from "../components/cards/newsCard.js";
-import { renderCompanyProfile } from "../components/cards/companyProfile.js";
+import { renderNewsCard } from "../components/cards/newsCard/newsCard.js";
+import { renderCompanyProfile } from "../components/cards/companyProfileCard/companyProfileCard.js";
 import { API_CONFIG } from "./constants.js";
 
 async function renderStockOverview(ticker) {
