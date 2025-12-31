@@ -16,15 +16,20 @@ export function renderNewsCard(newsData) {
             article.imageUrl || ""
           }');">
             <div class="news-overlay">
-              <p><a href="${article.articleUrl}" target="_blank"><strong>${
-          article.title
-        }</strong></a></p>
+              <p class="article-title"><a href="${
+                article.articleUrl
+              }" target="_blank"><strong>${article.title}</strong></a></p>
               <p class="news-desc">${
                 article.description || "No description available"
               }</p>
-              <p><small>Published: ${new Date(
-                article.publishedUtc
-              ).toLocaleDateString()}</small></p>
+              <div class="news-footer">
+                <p class="news-date"><small>Published: ${new Date(
+                  article.publishedUtc
+                ).toLocaleDateString()}</small></p>
+                <a href="${
+                  article.articleUrl
+                }" target="_blank" class="news-full-article-btn">Full Article</a>
+              </div>
             </div>
           </div>
       `

@@ -185,9 +185,6 @@ body {
 
     /* Only truncate the description paragraph */
     .news-item .news-overlay p.news-desc {
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 1.4em;
@@ -197,6 +194,42 @@ body {
     .news-item .news-overlay a {
       color: #fff;
       text-decoration: underline;
+    }
+
+    .news-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 0.5rem;
+    }
+
+    .news-date {
+      margin: 0;
+    }
+
+    .article-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .news-full-article-btn {
+      background-color: #0078d7;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.2s;
+      display: inline-block;
+    }
+
+    .news-full-article-btn:hover {
+      background-color: #106ebe;
+    }
+
+    .news-full-article-btn:focus {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
     }
 }
 
