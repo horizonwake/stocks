@@ -4,9 +4,10 @@
   justify-content: center;
   gap: 1rem;
   align-items: center;
-    overflow-x: auto;
-    flex-wrap: nowrap;
+  overflow-x: auto;
+  flex-wrap: nowrap;
   margin-top: 1rem;
+  width: max-content;
 }
 .news-pagination {
   border: 1px solid #ccc;
@@ -91,7 +92,7 @@
 
 .news-item .news-overlay p.news-desc {
   display: -webkit-box;
-  -webkit-line-clamp: 4; /* change this number to show more/fewer lines */
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
