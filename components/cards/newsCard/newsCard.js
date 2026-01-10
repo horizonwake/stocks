@@ -39,7 +39,7 @@ export function renderNewsCard(newsData) {
     // Pagination
     const totalPages = Math.ceil(newsData.length / ITEMS_PER_PAGE);
     let footerContent = "";
-    let currentBucket = "";
+
     if (totalPages > 1) {
       const startArticle = page * ITEMS_PER_PAGE + 1;
       const endArticle = Math.min((page + 1) * ITEMS_PER_PAGE, newsData.length);

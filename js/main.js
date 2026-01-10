@@ -1,6 +1,7 @@
 import { getTickerOverview, getNewsForTicker } from "./api.js";
 import { renderNewsCard } from "../components/cards/newsCard/newsCard.js";
 import { renderCompanyProfile } from "../components/cards/companyProfileCard/companyProfileCard.js";
+import { renderChartCard } from "../components/cards/chartCard/chartCard.js";
 import { API_CONFIG } from "./constants.js";
 
 async function renderStockOverview(ticker) {
@@ -47,6 +48,7 @@ async function renderStockOverview(ticker) {
     }
 
     if (info.type === "CS") {
+      renderChartCard("cards-container", info.ticker);
       renderCompanyProfile(info);
       renderNewsCard(news);
     } else {

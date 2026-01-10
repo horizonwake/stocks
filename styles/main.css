@@ -1,4 +1,5 @@
 @import "../components/cards/newsCard/newsCard.css";
+@import "../components/cards/chartCard/chartCard.css";
 @import "../components/cards/companyProfileCard/companyProfileCard.css";
 body {
     font-family: Helvetica, Arial, sans;

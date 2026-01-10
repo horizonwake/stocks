@@ -1,0 +1,56 @@
+#chart-card {
+  min-width: 100%;
+}
+
+.chart-card {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.chart-card .card-header {
+  padding: 1rem;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chart-timeframe-selector select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.chart-timeframe-selector select:focus {
+  outline: 2px solid #0078d7;
+  outline-offset: 2px;
+}
+
+.chart-area {
+  flex: 1;
+  position: relative;
+  height: 400px;
+  padding: 1rem;
+  background: #fff;
+}
+
+.chart-area canvas {
+  max-height: 100%;
+}
+
+.chart-card .card-footer {
+  padding: 0.75rem 1rem;
+  background: #f9f9f9;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
