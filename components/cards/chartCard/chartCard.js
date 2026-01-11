@@ -81,12 +81,14 @@ export function renderChartCard(
             label: `${ticker} Close Price`,
             data: closes,
             borderColor: "#0078d7",
-            backgroundColor: "rgba(0, 120, 215, 0.1)",
+            //backgroundColor: "rgba(0, 120, 215, 0.1)",
             borderWidth: 2,
-            fill: true,
+            fill: false,
             tension: 0.1,
-            pointRadius: 2,
-            pointHoverRadius: 4,
+            pointRadius: 0,
+            pointStyle: "line",
+            pointRotation: 90,
+            pointHoverRadius: 300,
             pointBackgroundColor: "#0078d7",
           },
         ],
@@ -114,8 +116,17 @@ export function renderChartCard(
           y: {
             beginAtZero: false,
             title: { display: true, text: "Price ($)" },
+            grid: {
+              display: true,
+              color: "#f0f0f0",
+            },
           },
-          x: { title: { display: true, text: "Date" } },
+          x: {
+            title: { display: true, text: "Date" },
+            grid: {
+              display: false,
+            },
+          },
         },
       },
     });
