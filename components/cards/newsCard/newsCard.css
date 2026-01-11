@@ -8,6 +8,7 @@
   flex-wrap: nowrap;
   margin-top: 1rem;
   width: max-content;
+  margin: 0 auto;
 }
 .news-pagination {
   border: 1px solid #ccc;

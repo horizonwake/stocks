@@ -3,6 +3,7 @@ import { renderNewsCard } from "../components/cards/newsCard/newsCard.js";
 import { renderCompanyProfile } from "../components/cards/companyProfileCard/companyProfileCard.js";
 import { renderChartCard } from "../components/cards/chartCard/chartCard.js";
 import { API_CONFIG } from "./constants.js";
+import { SearchBar } from "./searchBar.js";
 
 async function renderStockOverview(ticker) {
   const container = document.getElementById("cards-container");
@@ -70,4 +71,10 @@ document.getElementById("ticker-form").addEventListener("submit", (e) => {
     renderStockOverview(ticker);
     input.value = "";
   }
+});
+
+// Initialize search bar with predictive search
+const searchBar = new SearchBar("#ticker-input", (ticker) => {
+  renderStockOverview(ticker);
+  document.getElementById("ticker-input").value = "";
 });

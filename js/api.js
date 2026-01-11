@@ -64,3 +64,15 @@ export async function getMarketStatus() {
   const data = await apiFetch("/stocks/market-status");
   return data.data;
 }
+
+export async function searchStocks(query, limit = 10) {
+  const params = new URLSearchParams({
+    search: query,
+    active: "true",
+    market: "stocks",
+    limit: limit.toString(),
+  });
+
+  const data = await apiFetch(`/stocks/search?${params}`);
+  return data.data.results || [];
+}
