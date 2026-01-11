@@ -94,6 +94,7 @@
 .news-item .news-overlay p.news-desc {
   display: -webkit-box;
   -webkit-line-clamp: 4;
+  line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -125,7 +126,7 @@
 }
 
 .news-full-article-btn {
-  background-color: #0078d7;
+  background-color: #0062b1;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 4px;

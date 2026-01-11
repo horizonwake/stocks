@@ -11,33 +11,36 @@ export function renderChartCard(
   const html = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
       <div class="chart-timeframe-selector">
-        <select id="timeframe-select">
+        <label for="timeframe-select" class="sr-only">Select timeframe</label>
+        <select id="timeframe-select" aria-label="Chart timeframe">
           <option value="1m">1 Month</option>
           <option value="3m">3 Months</option>
           <option value="6m" selected>6 Months</option>
           <option value="1y">1 Year</option>
         </select>
       </div>
-      <button id="compare-btn" style="padding: 0.5rem 1rem; background-color: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer;">Compare</button>
+      <button id="compare-btn" aria-label="Compare stocks" style="padding: 0.5rem 1rem; color: white; border: none; border-radius: 4px; cursor: pointer;">Compare</button>
     </div>
     <div class="chart-area">
-      <canvas id="price-chart"></canvas>
+      <canvas id="price-chart" role="img" aria-label="Stock price chart"></canvas>
     </div>
 
     <!-- Compare Modal -->
-    <div id="compare-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div id="compare-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 2000; align-items: center; justify-content: center;">
       <div style="background-color: white; border-radius: 8px; padding: 2rem; width: 90%; max-width: 500px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
-        <h2 style="margin-top: 0;">Compare Symbols</h2>
+        <h2 id="modal-title" style="margin-top: 0;">Compare Symbols</h2>
         <div style="margin-bottom: 1.5rem;">
           <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: #666;">Add up to 4 symbols total</p>
-          <input type="text" id="compare-search" placeholder="Search and select a symbol" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+          <label for="compare-search" class="sr-only">Search for stocks to compare</label>
+          <input type="text" id="compare-search" placeholder="Search and select a symbol" autocomplete="off" aria-describedby="compare-help" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+          <span id="compare-help" class="sr-only">Type to search for stocks. Use arrow keys to navigate results, Enter to select.</span>
         </div>
-        <div id="selected-symbols" style="margin-bottom: 1.5rem; min-height: 100px; border: 1px solid #eee; border-radius: 4px; padding: 1rem;">
+        <div id="selected-symbols" role="list" aria-label="Selected stocks for comparison" style="margin-bottom: 1.5rem; min-height: 100px; border: 1px solid #eee; border-radius: 4px; padding: 1rem;">
           <p style="color: #666; font-size: 0.9rem;">Selected symbols will appear here</p>
         </div>
         <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-          <button id="modal-close-btn" style="padding: 0.75rem 1.5rem; border: 1px solid #ccc; background-color: white; border-radius: 4px; cursor: pointer;">Exit</button>
-          <button id="apply-compare-btn" style="padding: 0.75rem 1.5rem; background-color: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer; display: none;">Update Chart</button>
+          <button id="modal-close-btn" aria-label="Close comparison dialog" style="padding: 0.75rem 1.5rem; border: 1px solid #ccc; background-color: white; border-radius: 4px; cursor: pointer;">Exit</button>
+          <button id="apply-compare-btn" aria-label="Update chart with selected stocks" style="padding: 0.75rem 1.5rem; background-color: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer; display: none;">Update Chart</button>
         </div>
       </div>
     </div>
@@ -173,9 +176,18 @@ export function renderChartCard(
   });
 
   // Modal handlers
+  const closeModal = () => {
+    compareModal.style.display = "none";
+    compareModal.setAttribute("aria-hidden", "true");
+    compareSearch.value = "";
+    compareBtn.focus(); // Return focus to trigger element
+  };
+
   compareBtn.addEventListener("click", () => {
     compareModal.style.display = "flex";
+    compareModal.setAttribute("aria-hidden", "false");
     renderSelectedSymbols();
+    setTimeout(() => compareSearch.focus(), 100); // Focus search input
 
     new SearchBar("#compare-search", (selectedTicker) => {
       if (
@@ -194,15 +206,40 @@ export function renderChartCard(
     });
   });
 
-  modalCloseBtn.addEventListener("click", () => {
-    compareModal.style.display = "none";
-    compareSearch.value = "";
-  });
+  modalCloseBtn.addEventListener("click", closeModal);
 
   compareModal.addEventListener("click", (e) => {
     if (e.target === compareModal) {
-      compareModal.style.display = "none";
-      compareSearch.value = "";
+      closeModal();
+    }
+  });
+
+  // Focus trap for modal
+  const trapFocus = (e) => {
+    if (e.key !== "Tab") return;
+
+    const focusableElements = compareModal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const focusableArray = Array.from(focusableElements);
+    const firstElement = focusableArray[0];
+    const lastElement = focusableArray[focusableArray.length - 1];
+
+    if (e.shiftKey && document.activeElement === firstElement) {
+      e.preventDefault();
+      lastElement.focus();
+    } else if (!e.shiftKey && document.activeElement === lastElement) {
+      e.preventDefault();
+      firstElement.focus();
+    }
+  };
+
+  // Keyboard handlers for modal
+  compareModal.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeModal();
+    } else {
+      trapFocus(e);
     }
   });
 
@@ -217,12 +254,14 @@ export function renderChartCard(
     selectedSymbolsDiv.innerHTML = selectedSymbols
       .map(
         (sym, idx) => `
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background-color: #f5f5f5; border-radius: 4px; margin-bottom: 0.5rem;">
-          <span style="font-weight: 600;">${sym}</span>
+        <div role="listitem" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background-color: #f5f5f5; border-radius: 4px; margin-bottom: 0.5rem;">
+          <span style="font-weight: 600;">${sym}${
+          idx === 0 ? " (Original)" : ""
+        }</span>
           ${
             idx === 0
-              ? '<span style="color: #999; font-size: 0.85rem;">Cannot remove</span>'
-              : `<button class="remove-symbol" data-symbol="${sym}" style="background-color: #ff4444; color: white; border: none; border-radius: 4px; padding: 0.25rem 0.75rem; cursor: pointer; font-size: 0.85rem;">✕ Remove</button>`
+              ? '<span style="color: #999; font-size: 0.85rem;" aria-label="Original symbol cannot be removed">Cannot remove</span>'
+              : `<button class="remove-symbol" data-symbol="${sym}" aria-label="Remove ${sym} from comparison" style="background-color: #ff4444; color: white; border: none; border-radius: 4px; padding: 0.25rem 0.75rem; cursor: pointer; font-size: 0.85rem;">✕ Remove</button>`
           }
         </div>
       `

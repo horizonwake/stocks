@@ -22,9 +22,16 @@ export function renderCompanyProfile(data) {
       ${industry}
       <div class="description"><p> ${data?.description}</p></div>
   `;
-  const footerContent = `<p></p><a href=${
-    data?.homepageUrl
-  } target="_blank">${data?.homepageUrl.replace(/^https?:\/\//, "")}</a></p>`;
+  const footerContent = data?.homepageUrl
+    ? `<p><a href="${
+        data.homepageUrl
+      }" target="_blank" rel="noopener noreferrer" aria-label="Visit ${
+        data?.ticker
+      } company website">${data.homepageUrl.replace(
+        /^https?:\/\//,
+        ""
+      )}</a></p>`
+    : "";
   container.append(
     new CardComponent(
       "Company Profile",
