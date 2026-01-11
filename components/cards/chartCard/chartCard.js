@@ -3,7 +3,8 @@ import { CardComponent } from "../card.js";
 export function renderChartCard(
   containerId = "cards-container",
   ticker = "AAPL",
-  SearchBar = null
+  SearchBar = null,
+  initialComparisonSymbols = null
 ) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -59,9 +60,30 @@ export function renderChartCard(
   const selectedSymbolsDiv = document.getElementById("selected-symbols");
   const compareSearch = document.getElementById("compare-search");
 
+  const STORAGE_KEY = "stocks_last_search";
+  
   let chart = null;
-  let selectedSymbols = [ticker];
-  let comparisonSymbols = [ticker];
+  let selectedSymbols = initialComparisonSymbols && initialComparisonSymbols.length > 0 
+    ? [...initialComparisonSymbols] 
+    : [ticker];
+  let comparisonSymbols = initialComparisonSymbols && initialComparisonSymbols.length > 0 
+    ? [...initialComparisonSymbols] 
+    : [ticker];
+
+  // Save comparison to localStorage
+  function saveComparison() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const data = JSON.parse(stored);
+        data.comparisonSymbols = comparisonSymbols;
+        data.timestamp = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+    } catch (error) {
+      console.error("Error saving comparison to localStorage:", error);
+    }
+  }
 
   async function fetchAggregates(ticker, timeframe) {
     const now = new Date();
@@ -281,7 +303,10 @@ export function renderChartCard(
 
   applyCompareBtn.addEventListener("click", async () => {
     comparisonSymbols = [...selectedSymbols];
+    saveComparison();
     compareModal.style.display = "none";
+    compareModal.setAttribute("aria-hidden", "true");
+    compareBtn.focus();
     const timeframe = select.value;
     await updateChartWithComparisons(timeframe);
   });
@@ -380,7 +405,11 @@ export function renderChartCard(
 
   // Initial load
   (async () => {
-    const data = await fetchAggregates(ticker, "6m");
-    if (data.length) initChart(data);
+    if (initialComparisonSymbols && initialComparisonSymbols.length > 1) {
+      await updateChartWithComparisons("6m");
+    } else {
+      const data = await fetchAggregates(ticker, "6m");
+      if (data.length) initChart(data);
+    }
   })();
 }

@@ -5,7 +5,42 @@ import { renderChartCard } from "../components/cards/chartCard/chartCard.js";
 import { API_CONFIG } from "./constants.js";
 import { SearchBar } from "./searchBar.js";
 
-async function renderStockOverview(ticker) {
+const STORAGE_KEY = "stocks_last_search";
+
+// Load from localStorage on page load
+function loadLastSearch() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const { ticker, comparisonSymbols, timestamp } = JSON.parse(stored);
+      
+      // Check if data is less than 24 hours old
+      const oneDay = 24 * 60 * 60 * 1000;
+      if (timestamp && Date.now() - timestamp < oneDay) {
+        return { ticker, comparisonSymbols };
+      }
+    }
+  } catch (error) {
+    console.error("Error loading from localStorage:", error);
+  }
+  return null;
+}
+
+// Save to localStorage
+function saveLastSearch(ticker, comparisonSymbols = []) {
+  try {
+    const data = {
+      ticker,
+      comparisonSymbols,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving to localStorage:", error);
+  }
+}
+
+async function renderStockOverview(ticker, initialComparisonSymbols = null) {
   const container = document.getElementById("cards-container");
   const overviewTitle = document.getElementById("overview-title");
   container.innerHTML = "";
@@ -49,9 +84,12 @@ async function renderStockOverview(ticker) {
     }
 
     if (info.type === "CS") {
-      renderChartCard("cards-container", info.ticker, SearchBar);
+      renderChartCard("cards-container", info.ticker, SearchBar, initialComparisonSymbols);
       renderCompanyProfile(info);
       renderNewsCard(news);
+      
+      // Save to localStorage after successful render
+      saveLastSearch(info.ticker, initialComparisonSymbols || [info.ticker]);
     } else {
       container.innerHTML = `<p class="error">This ticker is not a stock.</p>`;
     }
@@ -77,4 +115,12 @@ document.getElementById("ticker-form").addEventListener("submit", (e) => {
 const searchBar = new SearchBar("#ticker-input", (ticker) => {
   renderStockOverview(ticker);
   document.getElementById("ticker-input").value = "";
+});
+
+// Load last search on page load
+window.addEventListener("DOMContentLoaded", () => {
+  const lastSearch = loadLastSearch();
+  if (lastSearch && lastSearch.ticker) {
+    renderStockOverview(lastSearch.ticker, lastSearch.comparisonSymbols);
+  }
 });
