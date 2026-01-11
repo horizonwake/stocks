@@ -13,7 +13,9 @@ export class SearchBar {
 
   init() {
     if (!this.input) {
-      console.error(`SearchBar: Input element not found for selector: ${this.input}`);
+      console.error(
+        `SearchBar: Input element not found for selector: ${this.input}`
+      );
       return;
     }
 
@@ -34,7 +36,9 @@ export class SearchBar {
 
     // Close dropdown when clicking outside
     document.addEventListener("click", (e) => {
-      if (!e.target.closest(`.search-container[data-input="${this.input.id}"]`)) {
+      if (
+        !e.target.closest(`.search-container[data-input="${this.input.id}"]`)
+      ) {
         this.closeDropdown();
       }
     });
@@ -77,14 +81,16 @@ export class SearchBar {
       const results = await searchStocks(query);
 
       if (results.length === 0) {
-        this.dropdown.innerHTML = '<div class="search-empty">No results found</div>';
+        this.dropdown.innerHTML =
+          '<div class="search-empty">No results found</div>';
         return;
       }
 
       this.renderResults(results);
     } catch (error) {
       console.error("Search error:", error);
-      this.dropdown.innerHTML = '<div class="search-error">Error loading results</div>';
+      this.dropdown.innerHTML =
+        '<div class="search-error">Error loading results</div>';
     }
   }
 

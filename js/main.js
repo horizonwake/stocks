@@ -49,7 +49,7 @@ async function renderStockOverview(ticker) {
     }
 
     if (info.type === "CS") {
-      renderChartCard("cards-container", info.ticker);
+      renderChartCard("cards-container", info.ticker, SearchBar);
       renderCompanyProfile(info);
       renderNewsCard(news);
     } else {
