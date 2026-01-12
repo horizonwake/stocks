@@ -33,7 +33,7 @@ export function renderChartCard(
         <div style="margin-bottom: 1.5rem;">
           <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: #666;">Add up to 4 symbols total</p>
           <label for="compare-search" class="sr-only">Search for stocks to compare</label>
-          <input type="text" id="compare-search" placeholder="Search and select a symbol" autocomplete="off" aria-describedby="compare-help" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+          <input type="text" id="compare-search" placeholder="Search and select a symbol" autocomplete="off" aria-describedby="compare-help" style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
           <span id="compare-help" class="sr-only">Type to search for stocks. Use arrow keys to navigate results, Enter to select.</span>
         </div>
         <div id="selected-symbols" role="list" aria-label="Selected stocks for comparison" style="margin-bottom: 1.5rem; min-height: 100px; border: 1px solid #eee; border-radius: 4px; padding: 1rem;">
@@ -61,14 +61,17 @@ export function renderChartCard(
   const compareSearch = document.getElementById("compare-search");
 
   const STORAGE_KEY = "stocks_last_search";
-  
+
   let chart = null;
-  let selectedSymbols = initialComparisonSymbols && initialComparisonSymbols.length > 0 
-    ? [...initialComparisonSymbols] 
-    : [ticker];
-  let comparisonSymbols = initialComparisonSymbols && initialComparisonSymbols.length > 0 
-    ? [...initialComparisonSymbols] 
-    : [ticker];
+  let selectedSymbols =
+    initialComparisonSymbols && initialComparisonSymbols.length > 0
+      ? [...initialComparisonSymbols]
+      : [ticker];
+  let comparisonSymbols =
+    initialComparisonSymbols && initialComparisonSymbols.length > 0
+      ? [...initialComparisonSymbols]
+      : [ticker];
+  let compareSearchBar = null; // Store SearchBar instance
 
   // Save comparison to localStorage
   function saveComparison() {
@@ -211,21 +214,24 @@ export function renderChartCard(
     renderSelectedSymbols();
     setTimeout(() => compareSearch.focus(), 100); // Focus search input
 
-    new SearchBar("#compare-search", (selectedTicker) => {
-      if (
-        selectedSymbols.length < 4 &&
-        !selectedSymbols.includes(selectedTicker)
-      ) {
-        selectedSymbols.push(selectedTicker);
-        renderSelectedSymbols();
-        compareSearch.value = "";
-        //Temporary alerts; to be replaced with better UI feedback
-      } else if (selectedSymbols.length >= 4) {
-        alert("Maximum 4 symbols allowed");
-      } else if (selectedSymbols.includes(selectedTicker)) {
-        alert("Symbol already added");
-      }
-    });
+    // Only create SearchBar once
+    if (!compareSearchBar && SearchBar) {
+      compareSearchBar = new SearchBar("#compare-search", (selectedTicker) => {
+        if (
+          selectedSymbols.length < 4 &&
+          !selectedSymbols.includes(selectedTicker)
+        ) {
+          selectedSymbols.push(selectedTicker);
+          renderSelectedSymbols();
+          compareSearch.value = "";
+          //Temporary alerts; to be replaced with better UI feedback
+        } else if (selectedSymbols.length >= 4) {
+          alert("Maximum 4 symbols allowed");
+        } else if (selectedSymbols.includes(selectedTicker)) {
+          alert("Symbol already added");
+        }
+      });
+    }
   });
 
   modalCloseBtn.addEventListener("click", closeModal);
