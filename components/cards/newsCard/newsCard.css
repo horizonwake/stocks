@@ -84,6 +84,7 @@
   overflow: hidden;
   display: flex;
   align-items: flex-end;
+  box-shadow: #16022c9e 2px 2px 2px 0;
 }
 
 .news-item .news-overlay {

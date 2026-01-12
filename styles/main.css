@@ -21,7 +21,7 @@ body {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     border: 1px solid #ccc;
-    border-radius: 20px 0 0 20px;
+    border-radius: 4px 0 0 4px;
     border-right: none;
     outline: none;
     background: #fff;
@@ -39,7 +39,7 @@ body {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     margin-left: 0;
-    border-radius: 0 20px 20px 0;
+    border-radius: 0 4px 4px 0;
     border: 1px solid #ccc;
     border-left: none;
     background-color: #0062b1;
@@ -70,6 +70,10 @@ body {
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  #ticker-form {
+    width: fit-content;
   }
 
   #ticker-input-listbox{

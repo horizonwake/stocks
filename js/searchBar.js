@@ -6,7 +6,7 @@ export class SearchBar {
     this.onSelect = onSelect;
     this.dropdown = null;
     this.debounceTimer = null;
-    this.debounceDelay = 300;
+    this.debounceDelay = 350;
     this.selectedIndex = -1;
     this.results = [];
 
