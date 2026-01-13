@@ -72,8 +72,10 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  #ticker-form {
-    width: fit-content;
+  form#ticker-form {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
   }
 
   #ticker-input-listbox{
@@ -224,4 +226,19 @@ body {
     .card {
         grid-column: span 2;
     }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 0px;
+  }
+  .card {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-bucket {
+    display: none;
+  }
 }
