@@ -1,8 +1,9 @@
 import { CardComponent } from "../card.js";
+import { NEWS_CONFIG } from "../../../js/constants.js";
 
 export function renderNewsCard(newsData) {
   const container = document.getElementById("cards-container");
-  const ITEMS_PER_PAGE = 3;
+  const ITEMS_PER_PAGE = NEWS_CONFIG.ITEMS_PER_PAGE;
   let currentPage = 0;
 
   function renderPage(page) {

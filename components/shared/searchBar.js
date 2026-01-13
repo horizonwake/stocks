@@ -1,4 +1,5 @@
-import { searchStocks } from "./api.js";
+import { searchStocks } from "../../js/api.js";
+import { TIME_CONSTANTS } from "../../js/constants.js";
 
 export class SearchBar {
   constructor(inputSelector, onSelect) {
@@ -6,7 +7,7 @@ export class SearchBar {
     this.onSelect = onSelect;
     this.dropdown = null;
     this.debounceTimer = null;
-    this.debounceDelay = 350;
+    this.debounceDelay = TIME_CONSTANTS.DEBOUNCE_DELAY;
     this.selectedIndex = -1;
     this.results = [];
 

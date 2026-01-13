@@ -1,4 +1,9 @@
 import { CardComponent } from "../card.js";
+import {
+  API_CONFIG,
+  STORAGE_KEY,
+  CHART_CONFIG,
+} from "../../../js/constants.js";
 
 export function renderChartCard(
   containerId = "cards-container",
@@ -14,10 +19,12 @@ export function renderChartCard(
       <div class="chart-timeframe-selector">
         <label for="timeframe-select" class="sr-only">Select timeframe</label>
         <select id="timeframe-select" aria-label="Chart timeframe">
-          <option value="1m">1 Month</option>
-          <option value="3m">3 Months</option>
-          <option value="6m" selected>6 Months</option>
-          <option value="1y">1 Year</option>
+          ${CHART_CONFIG.TIMEFRAMES.map(
+            (tf) =>
+              `<option value="${tf.value}"${
+                tf.value === CHART_CONFIG.DEFAULT_TIMEFRAME ? " selected" : ""
+              }>${tf.label}</option>`
+          ).join("")}
         </select>
       </div>
       <button id="compare-btn" aria-label="Compare stocks" style="padding: 0.5rem 1rem; color: white; border: none; border-radius: 4px; cursor: pointer;">Compare</button>
@@ -60,8 +67,6 @@ export function renderChartCard(
   const selectedSymbolsDiv = document.getElementById("selected-symbols");
   const compareSearch = document.getElementById("compare-search");
 
-  const STORAGE_KEY = "stocks_last_search";
-
   let chart = null;
   let selectedSymbols =
     initialComparisonSymbols && initialComparisonSymbols.length > 0
@@ -93,13 +98,13 @@ export function renderChartCard(
     let from,
       to = now.toISOString().split("T")[0];
 
-    const daysMap = { "1m": 30, "3m": 90, "6m": 180, "1y": 365 };
+    const daysMap = { "1m": 30, "3m": 90, "6m": 180, "1y": 365, "2y": 730 };
     const days = daysMap[timeframe] || 180;
     from = new Date(now.getTime() - days * 24 * 60 * 60 * 1000)
       .toISOString()
       .split("T")[0];
 
-    const url = `https://api.horizonwake.com/stocks/aggregates/${ticker}?multiplier=1&timespan=day&from=${from}&to=${to}&limit=365`;
+    const url = `${API_CONFIG.baseUrl}/stocks/aggregates/${ticker}?multiplier=1&timespan=day&from=${from}&to=${to}&limit=730`;
 
     try {
       const res = await fetch(url);
@@ -218,15 +223,19 @@ export function renderChartCard(
     if (!compareSearchBar && SearchBar) {
       compareSearchBar = new SearchBar("#compare-search", (selectedTicker) => {
         if (
-          selectedSymbols.length < 4 &&
+          selectedSymbols.length < CHART_CONFIG.MAX_COMPARISON_SYMBOLS &&
           !selectedSymbols.includes(selectedTicker)
         ) {
           selectedSymbols.push(selectedTicker);
           renderSelectedSymbols();
           compareSearch.value = "";
           //Temporary alerts; to be replaced with better UI feedback
-        } else if (selectedSymbols.length >= 4) {
-          alert("Maximum 4 symbols allowed");
+        } else if (
+          selectedSymbols.length >= CHART_CONFIG.MAX_COMPARISON_SYMBOLS
+        ) {
+          alert(
+            `Maximum ${CHART_CONFIG.MAX_COMPARISON_SYMBOLS} symbols allowed`
+          );
         } else if (selectedSymbols.includes(selectedTicker)) {
           alert("Symbol already added");
         }
@@ -342,7 +351,6 @@ export function renderChartCard(
       new Date(ts).toLocaleDateString()
     );
 
-    const colors = ["#0078d7", "#ff6b6b", "#51cf66", "#ffaa00ff"];
     const datasets = comparisonSymbols.map((sym, idx) => {
       const symbolData = dataBySymbol[sym];
       const dataMap = {};
@@ -355,8 +363,8 @@ export function renderChartCard(
       return {
         label: sym,
         data: closes,
-        borderColor: colors[idx],
-        backgroundColor: colors[idx],
+        borderColor: CHART_CONFIG.COLORS[idx],
+        backgroundColor: CHART_CONFIG.COLORS[idx],
         borderWidth: 2,
         fill: false,
         tension: 0.1,
@@ -364,7 +372,7 @@ export function renderChartCard(
         pointStyle: "line",
         pointRotation: 90,
         pointHoverRadius: 300,
-        pointBackgroundColor: colors[idx],
+        pointBackgroundColor: CHART_CONFIG.COLORS[idx],
       };
     });
 
@@ -412,9 +420,12 @@ export function renderChartCard(
   // Initial load
   (async () => {
     if (initialComparisonSymbols && initialComparisonSymbols.length > 1) {
-      await updateChartWithComparisons("6m");
+      await updateChartWithComparisons(CHART_CONFIG.DEFAULT_TIMEFRAME);
     } else {
-      const data = await fetchAggregates(ticker, "6m");
+      const data = await fetchAggregates(
+        ticker,
+        CHART_CONFIG.DEFAULT_TIMEFRAME
+      );
       if (data.length) initChart(data);
     }
   })();
