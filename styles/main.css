@@ -32,12 +32,7 @@ body {
     background: #fff;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     transition: border-color 0.2s, box-shadow 0.2s;
-    margin-right: 0;
-  }
-
-  input[type="text"]:focus {
-    border-color: #0078d7;
-    box-shadow: 0 2px 8px rgba(0,120,215,0.10);
+    margin-right: 2px;
   }
   
   button {
@@ -81,6 +76,7 @@ body {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+    width: fit-content;
   }
 
   #ticker-input-listbox{
@@ -134,18 +130,6 @@ body {
     background-color: #e3f2fd;
     outline: 2px solid #0078d7;
     outline-offset: -2px;
-  }
-
-  .search-result:focus {
-    outline: 2px solid #0078d7;
-    outline-offset: -2px;
-  }
-
-  button:focus,
-  input:focus,
-  select:focus {
-    outline: 2px solid #0063b4;
-    outline-offset: 2px;
   }
 
   /* Screen reader only class */

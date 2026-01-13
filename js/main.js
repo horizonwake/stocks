@@ -2,7 +2,12 @@ import { getTickerOverview, getNewsForTicker } from "./api.js";
 import { renderNewsCard } from "../components/cards/newsCard/newsCard.js";
 import { renderCompanyProfile } from "../components/cards/companyProfileCard/companyProfileCard.js";
 import { renderChartCard } from "../components/cards/chartCard/chartCard.js";
-import { API_CONFIG, STORAGE_KEY, TIME_CONSTANTS, NEWS_CONFIG } from "./constants.js";
+import {
+  API_CONFIG,
+  STORAGE_KEY,
+  TIME_CONSTANTS,
+  NEWS_CONFIG,
+} from "./constants.js";
 import { SearchBar } from "../components/shared/searchBar.js";
 
 // Load from localStorage on page load
@@ -43,7 +48,10 @@ async function renderStockOverview(ticker, initialComparisonSymbols = null) {
   container.innerHTML = "";
   try {
     const info = await getTickerOverview(ticker.toUpperCase());
-    const news = await getNewsForTicker(ticker.toUpperCase(), NEWS_CONFIG.MAIN_PAGE_LIMIT);
+    const news = await getNewsForTicker(
+      ticker.toUpperCase(),
+      NEWS_CONFIG.MAIN_PAGE_LIMIT
+    );
     const baseUrl = API_CONFIG.baseUrl;
 
     const logoUrl = info.branding?.logo_url
