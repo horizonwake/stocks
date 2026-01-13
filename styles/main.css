@@ -4,13 +4,14 @@
 body {
     font-family: Helvetica, Arial, sans;
     font-weight: 400;
-    padding: 2rem;
     background-color: #e9e7e7;
   }
 
 #app-container {
     max-width: 1800px;
+    min-width: 370px;
     margin: 0 auto;
+    width: 90%;
 }
 
   img {
@@ -223,6 +224,12 @@ body {
   }
   .card {
     min-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  #app-container {
+    width: 100%;
   }
 }
 
