@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stock Overview</title>
-  <link rel="stylesheet" href="styles/main.css">
-  <link rel="icon" href="styles/main.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.1.0/dist/chartjs-plugin-zoom.min.js"></script>
-</head>
-<body>
-  <div class="title-container">
-    <h1 id="overview-title" class="title">Overview</h1>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock Overview</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="icon" href="styles/main.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.1.0/dist/chartjs-plugin-zoom.min.js"></script>
+  </head>
+  <body>
+    <div id="app-container">
+      <div class="title-container">
+        <h1 id="overview-title" class="title">Overview</h1>
+      </div>
 
-  <form id="ticker-form" role="search" aria-label="Stock ticker search">
-    <label for="ticker-input" class="sr-only">Stock ticker symbol</label>
-    <input type="text" id="ticker-input" placeholder="Enter a ticker (e.g. AAPL)" autocomplete="off" required aria-describedby="ticker-help">
-    <button type="submit" aria-label="Search for stock">Search</button>
-  </form>
-  <span id="ticker-help" class="sr-only">Enter a stock ticker symbol to view company information</span>
-  <div id="cards-container" aria-live="polite" aria-busy="false">
-      <p class="placeholder">Enter a ticker to begin.</p>
+      <form id="ticker-form" role="search" aria-label="Stock ticker search">
+        <label for="ticker-input" class="sr-only">Stock ticker symbol</label>
+        <input
+          type="text"
+          id="ticker-input"
+          placeholder="Enter a ticker (e.g. AAPL)"
+          autocomplete="off"
+          required
+          aria-describedby="ticker-help"
+        />
+        <button type="submit" aria-label="Search for stock">Search</button>
+      </form>
+      <span id="ticker-help" class="sr-only"
+        >Enter a stock ticker symbol to view company information</span
+      >
+      <div id="cards-container" aria-live="polite" aria-busy="false">
+        <p class="placeholder">Enter a ticker to begin.</p>
+      </div>
     </div>
-  <script type="module" src="js/main.js"></script>
-</body>
+    <script type="module" src="js/main.js"></script>
+  </body>
 </html>
