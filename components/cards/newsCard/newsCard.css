@@ -150,7 +150,19 @@
   background-color: #106ebe;
 }
 
-.news-full-article-btn:focus {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
+@media (max-width: 480px) {
+  .news-bucket {
+    display: none;
+  }
+}
+
+.news-empty-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.news-empty-message p {
+  color: #666;
 }

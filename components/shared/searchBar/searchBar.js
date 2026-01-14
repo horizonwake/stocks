@@ -1,4 +1,5 @@
-import { searchStocks } from "./api.js";
+import { searchStocks } from "../../../js/api.js";
+import { TIME_CONSTANTS } from "../../../js/constants.js";
 
 export class SearchBar {
   constructor(inputSelector, onSelect) {
@@ -6,7 +7,7 @@ export class SearchBar {
     this.onSelect = onSelect;
     this.dropdown = null;
     this.debounceTimer = null;
-    this.debounceDelay = 350;
+    this.debounceDelay = TIME_CONSTANTS.DEBOUNCE_DELAY;
     this.selectedIndex = -1;
     this.results = [];
 
@@ -33,10 +34,7 @@ export class SearchBar {
     // Add event listeners
     this.input.addEventListener("input", (e) => this.handleInput(e));
     this.input.addEventListener("keydown", (e) => this.handleKeydown(e));
-    this.input.addEventListener("blur", () => {
-      // Delay closing to allow click handlers to fire
-      setTimeout(() => this.closeDropdown(), 100);
-    });
+    this.input.addEventListener("blur", () => this.closeDropdown());
     this.input.addEventListener("focus", () => {
       if (this.input.value.trim()) {
         this.openDropdown();
@@ -120,7 +118,6 @@ export class SearchBar {
   handleInput(e) {
     const query = e.target.value.trim();
 
-    // Clear previous debounce timer
     clearTimeout(this.debounceTimer);
 
     if (query.length < 1) {
@@ -128,7 +125,6 @@ export class SearchBar {
       return;
     }
 
-    // Debounce API call
     this.debounceTimer = setTimeout(() => {
       this.fetchAndDisplay(query);
     }, this.debounceDelay);

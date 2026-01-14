@@ -2,10 +2,13 @@ import { getTickerOverview, getNewsForTicker } from "./api.js";
 import { renderNewsCard } from "../components/cards/newsCard/newsCard.js";
 import { renderCompanyProfile } from "../components/cards/companyProfileCard/companyProfileCard.js";
 import { renderChartCard } from "../components/cards/chartCard/chartCard.js";
-import { API_CONFIG } from "./constants.js";
-import { SearchBar } from "./searchBar.js";
-
-const STORAGE_KEY = "stocks_last_search";
+import {
+  API_CONFIG,
+  STORAGE_KEY,
+  TIME_CONSTANTS,
+  NEWS_CONFIG,
+} from "./constants.js";
+import { SearchBar } from "../components/shared/searchBar/searchBar.js";
 
 // Load from localStorage on page load
 function loadLastSearch() {
@@ -13,10 +16,9 @@ function loadLastSearch() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const { ticker, comparisonSymbols, timestamp } = JSON.parse(stored);
-      
+
       // Check if data is less than 24 hours old
-      const oneDay = 24 * 60 * 60 * 1000;
-      if (timestamp && Date.now() - timestamp < oneDay) {
+      if (timestamp && Date.now() - timestamp < TIME_CONSTANTS.ONE_DAY_MS) {
         return { ticker, comparisonSymbols };
       }
     }
@@ -32,7 +34,7 @@ function saveLastSearch(ticker, comparisonSymbols = []) {
     const data = {
       ticker,
       comparisonSymbols,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
@@ -42,11 +44,13 @@ function saveLastSearch(ticker, comparisonSymbols = []) {
 
 async function renderStockOverview(ticker, initialComparisonSymbols = null) {
   const container = document.getElementById("cards-container");
-  const overviewTitle = document.getElementById("overview-title");
   container.innerHTML = "";
   try {
     const info = await getTickerOverview(ticker.toUpperCase());
-    const news = await getNewsForTicker(ticker.toUpperCase(), 21);
+    const news = await getNewsForTicker(
+      ticker.toUpperCase(),
+      NEWS_CONFIG.MAIN_PAGE_LIMIT
+    );
     const baseUrl = API_CONFIG.baseUrl;
 
     const logoUrl = info.branding?.logo_url
@@ -59,36 +63,38 @@ async function renderStockOverview(ticker, initialComparisonSymbols = null) {
 
     // Update favicon
     const link = document.querySelector('link[rel="icon"]');
-    link.href = logoIcon;
-
-    if (info.name) {
-      overviewTitle.innerText = `Overview: ${info.ticker}`;
+    if (logoIcon) {
+      link.href = logoIcon;
+    } else {
+      link.href = "favicon.ico";
     }
+
+    const logoContainer = document.createElement("div");
+    const nameTitle = document.createElement("h2");
+    nameTitle.innerText = info.name;
+    logoContainer.className = "cards-title";
 
     // update logo
     if (logoUrl) {
-      const logoContainer = document.createElement("div");
       const imgElement = document.createElement("img");
-      const tickerTitle = document.createElement("h2");
-      const nameTitle = document.createElement("h2");
-      nameTitle.innerText = info.name;
-      tickerTitle.innerText = info.ticker;
-      logoContainer.className = "cards-title";
       imgElement.src = logoUrl;
       imgElement.alt = `${info.name} logo`;
       imgElement.className = "company-logo";
-      container.appendChild(logoContainer);
       logoContainer.appendChild(imgElement);
-      logoContainer.appendChild(nameTitle);
-      logoContainer.appendChild(tickerTitle);
     }
-
+    logoContainer.appendChild(nameTitle);
+    container.appendChild(logoContainer);
     if (info.type === "CS") {
-      renderChartCard("cards-container", info.ticker, SearchBar, initialComparisonSymbols);
+      renderChartCard(
+        "cards-container",
+        info.ticker,
+        SearchBar,
+        initialComparisonSymbols
+      );
       renderCompanyProfile(info);
-      renderNewsCard(news);
-      
-      // Save to localStorage after successful render
+      renderNewsCard(news, info.ticker);
+
+      // Save to localStorage after render
       saveLastSearch(info.ticker, initialComparisonSymbols || [info.ticker]);
     } else {
       container.innerHTML = `<p class="error">This ticker is not a stock.</p>`;
@@ -99,7 +105,6 @@ async function renderStockOverview(ticker, initialComparisonSymbols = null) {
   }
 }
 
-// Handle form submit
 document.getElementById("ticker-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -112,12 +117,12 @@ document.getElementById("ticker-form").addEventListener("submit", (e) => {
 });
 
 // Initialize search bar with predictive search
-const searchBar = new SearchBar("#ticker-input", (ticker) => {
+new SearchBar("#ticker-input", (ticker) => {
   renderStockOverview(ticker);
   document.getElementById("ticker-input").value = "";
 });
 
-// Load last search on page load
+// Load last search
 window.addEventListener("DOMContentLoaded", () => {
   const lastSearch = loadLastSearch();
   if (lastSearch && lastSearch.ticker) {
