@@ -292,9 +292,7 @@ export function renderChartCard(
       .map(
         (sym, idx) => `
         <div role="listitem" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background-color: #f5f5f5; border-radius: 4px; margin-bottom: 0.5rem;">
-          <span style="font-weight: 600;">${sym}${
-          idx === 0 ? " (Original)" : ""
-        }</span>
+          <span style="font-weight: 600;">${sym}</span>
           ${
             idx === 0
               ? '<span style="color: #999; font-size: 0.85rem;" aria-label="Original symbol cannot be removed">Cannot remove</span>'

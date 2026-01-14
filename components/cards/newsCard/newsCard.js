@@ -1,10 +1,18 @@
 import { CardComponent } from "../card.js";
 import { NEWS_CONFIG } from "../../../js/constants.js";
 
-export function renderNewsCard(newsData) {
+export function renderNewsCard(newsData, ticker = "") {
   const container = document.getElementById("cards-container");
   const ITEMS_PER_PAGE = NEWS_CONFIG.ITEMS_PER_PAGE;
   let currentPage = 0;
+
+  // Check if newsData is empty
+  if (!newsData || newsData.length === 0) {
+    const html = `<div style="display: flex; justify-content: center; align-items: center; min-height: 200px;"><p style="color: #666;">No news available for ${ticker}</p></div>`;
+    const card = new CardComponent("Recent News", "news", html).render();
+    container.append(card);
+    return;
+  }
 
   function renderPage(page) {
     const start = page * ITEMS_PER_PAGE;

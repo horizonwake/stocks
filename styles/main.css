@@ -4,14 +4,15 @@
 body {
     font-family: Helvetica, Arial, sans;
     font-weight: 400;
-    background-color: #e9e7e7;
+    background-color: #ddd;
+    padding: 2px;
   }
 
 #app-container {
     max-width: 1800px;
     min-width: 370px;
     margin: 0 auto;
-    width: 90%;
+    width: fit-content;
 }
 
   img {
@@ -34,6 +35,7 @@ body {
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     transition: border-color 0.2s, box-shadow 0.2s;
     margin-right: 2px;
+    flex-grow: 1;
   }
   
   button {
@@ -77,7 +79,6 @@ body {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    width: fit-content;
   }
 
   #ticker-input-listbox{
@@ -146,17 +147,6 @@ body {
     border-width: 0;
   }
 
-  .title-container {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-
-    .title {
-        padding-left: 10px;
-        align-self: flex-end;
-    }
-  }
-
   #cards-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -170,12 +160,17 @@ body {
       grid-column: 1 / -1;
       display: flex;
       border-bottom: 1px solid #ddd;
-      justify-content: space-between;
+      justify-content: center;
+      text-align: center;
+      background-color: #ddd;
+      border-radius: 6px;
+      padding: 0 5px;
     }
         img {
         max-width: 100px;
         max-height: 50px;
         align-self: center;
+        padding-right: 10px;
     }
 }
 
@@ -224,12 +219,6 @@ body {
   }
   .card {
     min-width: 100%;
-  }
-}
-
-@media (max-width: 576px) {
-  #app-container {
-    width: 100%;
   }
 }
 

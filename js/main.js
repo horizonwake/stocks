@@ -44,7 +44,6 @@ function saveLastSearch(ticker, comparisonSymbols = []) {
 
 async function renderStockOverview(ticker, initialComparisonSymbols = null) {
   const container = document.getElementById("cards-container");
-  const overviewTitle = document.getElementById("overview-title");
   container.innerHTML = "";
   try {
     const info = await getTickerOverview(ticker.toUpperCase());
@@ -65,28 +64,21 @@ async function renderStockOverview(ticker, initialComparisonSymbols = null) {
     // Update favicon
     const link = document.querySelector('link[rel="icon"]');
     link.href = logoIcon;
-
-    if (info.name) {
-      overviewTitle.innerText = `Overview: ${info.ticker}`;
-    }
+    const logoContainer = document.createElement("div");
+    const nameTitle = document.createElement("h2");
+    nameTitle.innerText = info.name;
+    logoContainer.className = "cards-title";
+    container.appendChild(logoContainer);
 
     // update logo
     if (logoUrl) {
-      const logoContainer = document.createElement("div");
       const imgElement = document.createElement("img");
-      const tickerTitle = document.createElement("h2");
-      const nameTitle = document.createElement("h2");
-      nameTitle.innerText = info.name;
-      tickerTitle.innerText = info.ticker;
-      logoContainer.className = "cards-title";
       imgElement.src = logoUrl;
       imgElement.alt = `${info.name} logo`;
       imgElement.className = "company-logo";
-      container.appendChild(logoContainer);
       logoContainer.appendChild(imgElement);
-      logoContainer.appendChild(nameTitle);
-      logoContainer.appendChild(tickerTitle);
     }
+    logoContainer.appendChild(nameTitle);
 
     if (info.type === "CS") {
       renderChartCard(
@@ -96,7 +88,7 @@ async function renderStockOverview(ticker, initialComparisonSymbols = null) {
         initialComparisonSymbols
       );
       renderCompanyProfile(info);
-      renderNewsCard(news);
+      renderNewsCard(news, info.ticker);
 
       // Save to localStorage after successful render
       saveLastSearch(info.ticker, initialComparisonSymbols || [info.ticker]);
