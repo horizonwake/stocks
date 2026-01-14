@@ -1,6 +1,7 @@
 @import "../components/cards/newsCard/newsCard.css";
 @import "../components/cards/chartCard/chartCard.css";
 @import "../components/cards/companyProfileCard/companyProfileCard.css";
+@import "../components/shared/searchBar/searchBar.css";
 body {
     font-family: Helvetica, Arial, sans;
     font-weight: 400;
@@ -56,25 +57,6 @@ body {
     color: red;
   }
 
-  .search-container {
-    position: relative;
-  }
-
-  .search-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    max-height: 300px;
-    overflow-y: auto;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
   form#ticker-form {
     display: flex;
     flex-wrap: nowrap;
@@ -87,64 +69,6 @@ body {
 
   #compare-search {
     width: -webkit-fill-available;
-  }
-
-  .search-result {
-    padding: 0.75rem 1rem;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background-color 0.2s;
-  }
-
-  .search-result:hover {
-    background-color: #f5f5f5;
-  }
-
-  .search-result:last-child {
-    border-bottom: none;
-  }
-
-  .search-result-ticker {
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-
-  .search-result-name {
-    font-size: 0.85rem;
-    color: #666;
-  }
-
-  .search-loading,
-  .search-empty,
-  .search-error {
-    padding: 1rem;
-    text-align: center;
-    color: #666;
-  }
-
-  .search-error {
-    color: #d32f2f;
-  }
-
-  .search-result.selected {
-    background-color: #e3f2fd;
-    outline: 2px solid #0078d7;
-    outline-offset: -2px;
-  }
-
-  /* Screen reader only class */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
   }
 
   #cards-container {
@@ -219,11 +143,5 @@ body {
   }
   .card {
     min-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .news-bucket {
-    display: none;
   }
 }

@@ -15,7 +15,7 @@ export function renderChartCard(
   if (!container) return;
 
   const html = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <div class="chart-controls">
       <div class="chart-timeframe-selector">
         <label for="timeframe-select" class="sr-only">Select timeframe</label>
         <select id="timeframe-select" aria-label="Chart timeframe">
@@ -27,28 +27,28 @@ export function renderChartCard(
           ).join("")}
         </select>
       </div>
-      <button id="compare-btn" aria-label="Compare stocks" style="padding: 0.5rem 1rem; color: white; border: none; border-radius: 4px; cursor: pointer;">Compare</button>
+      <button id="compare-btn" aria-label="Compare stocks">Compare</button>
     </div>
     <div class="chart-area">
       <canvas id="price-chart" role="img" aria-label="Stock price chart"></canvas>
     </div>
 
     <!-- Compare Modal -->
-    <div id="compare-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 2000; align-items: center; justify-content: center;">
-      <div style="background-color: white; border-radius: 8px; padding: 2rem; width: 90%; max-width: 500px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
-        <h2 id="modal-title" style="margin-top: 0;">Compare Symbols</h2>
-        <div style="margin-bottom: 1.5rem;">
-          <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: #666;">Add up to 4 symbols total</p>
+    <div id="compare-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+      <div class="modal-content">
+        <h2 id="modal-title">Compare Symbols</h2>
+        <div class="modal-search-section">
+          <p>Add up to 4 symbols total</p>
           <label for="compare-search" class="sr-only">Search for stocks to compare</label>
-          <input type="text" id="compare-search" placeholder="Search and select a symbol" autocomplete="off" aria-describedby="compare-help" style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+          <input type="text" id="compare-search" placeholder="Search and select a symbol" autocomplete="off" aria-describedby="compare-help">
           <span id="compare-help" class="sr-only">Type to search for stocks. Use arrow keys to navigate results, Enter to select.</span>
         </div>
-        <div id="selected-symbols" role="list" aria-label="Selected stocks for comparison" style="margin-bottom: 1.5rem; min-height: 100px; border: 1px solid #eee; border-radius: 4px; padding: 1rem;">
-          <p style="color: #666; font-size: 0.9rem;">Selected symbols will appear here</p>
+        <div id="selected-symbols" role="list" aria-label="Selected stocks for comparison">
+          <p>Selected symbols will appear here</p>
         </div>
-        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-          <button id="modal-close-btn" aria-label="Close comparison dialog" style="padding: 0.75rem 1.5rem; border: 1px solid #ccc; background-color: white; border-radius: 4px; cursor: pointer;">Exit</button>
-          <button id="apply-compare-btn" aria-label="Update chart with selected stocks" style="padding: 0.75rem 1.5rem; background-color: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer; display: none;">Update Chart</button>
+        <div class="modal-buttons">
+          <button id="modal-close-btn" aria-label="Close comparison dialog">Exit</button>
+          <button id="apply-compare-btn" aria-label="Update chart with selected stocks">Update Chart</button>
         </div>
       </div>
     </div>
@@ -282,8 +282,7 @@ export function renderChartCard(
 
   function renderSelectedSymbols() {
     if (selectedSymbols.length === 0) {
-      selectedSymbolsDiv.innerHTML =
-        '<p style="color: #666; font-size: 0.9rem;">No symbols selected</p>';
+      selectedSymbolsDiv.innerHTML = "<p>No symbols selected</p>";
       applyCompareBtn.style.display = "none";
       return;
     }
@@ -291,12 +290,12 @@ export function renderChartCard(
     selectedSymbolsDiv.innerHTML = selectedSymbols
       .map(
         (sym, idx) => `
-        <div role="listitem" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background-color: #f5f5f5; border-radius: 4px; margin-bottom: 0.5rem;">
-          <span style="font-weight: 600;">${sym}</span>
+        <div role="listitem" class="selected-symbol-item">
+          <span>${sym}</span>
           ${
             idx === 0
-              ? '<span style="color: #999; font-size: 0.85rem;" aria-label="Original symbol cannot be removed">Cannot remove</span>'
-              : `<button class="remove-symbol" data-symbol="${sym}" aria-label="Remove ${sym} from comparison" style="background-color: #ff4444; color: white; border: none; border-radius: 4px; padding: 0.25rem 0.75rem; cursor: pointer; font-size: 0.85rem;">✕ Remove</button>`
+              ? '<span class="symbol-cannot-remove" aria-label="Original symbol cannot be removed">Cannot remove</span>'
+              : `<button class="remove-symbol" data-symbol="${sym}" aria-label="Remove ${sym} from comparison">✕ Remove</button>`
           }
         </div>
       `

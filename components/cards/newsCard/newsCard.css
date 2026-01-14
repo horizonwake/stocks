@@ -149,3 +149,20 @@
 .news-full-article-btn:hover {
   background-color: #106ebe;
 }
+
+@media (max-width: 480px) {
+  .news-bucket {
+    display: none;
+  }
+}
+
+.news-empty-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.news-empty-message p {
+  color: #666;
+}

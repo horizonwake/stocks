@@ -8,7 +8,7 @@ export function renderNewsCard(newsData, ticker = "") {
 
   // Check if newsData is empty
   if (!newsData || newsData.length === 0) {
-    const html = `<div style="display: flex; justify-content: center; align-items: center; min-height: 200px;"><p style="color: #666;">No news available for ${ticker}</p></div>`;
+    const html = `<div class="news-empty-message"><p>No news available for ${ticker}</p></div>`;
     const card = new CardComponent("Recent News", "news", html).render();
     container.append(card);
     return;
