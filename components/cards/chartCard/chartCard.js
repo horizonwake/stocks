@@ -171,7 +171,6 @@ export function renderChartCard(
             pan: {
               enabled: true,
               mode: "x",
-              modifierKey: "ctrl",
             },
           },
         },
@@ -395,7 +394,6 @@ export function renderChartCard(
             pan: {
               enabled: true,
               mode: "x",
-              modifierKey: "ctrl",
             },
           },
         },

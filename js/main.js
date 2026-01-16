@@ -80,6 +80,9 @@ async function renderStockOverview(ticker, initialComparisonSymbols = null) {
       imgElement.src = logoUrl;
       imgElement.alt = `${info.name} logo`;
       imgElement.className = "company-logo";
+      imgElement.onerror = () => {
+        imgElement.remove();
+      };
       logoContainer.appendChild(imgElement);
     }
     logoContainer.appendChild(nameTitle);
