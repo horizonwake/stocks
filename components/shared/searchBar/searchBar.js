@@ -28,10 +28,8 @@ export class SearchBar {
     this.input.setAttribute("aria-expanded", "false");
     this.input.setAttribute("aria-haspopup", "listbox");
 
-    // Create dropdown container
     this.createDropdown();
 
-    // Add event listeners
     this.input.addEventListener("input", (e) => this.handleInput(e));
     this.input.addEventListener("keydown", (e) => this.handleKeydown(e));
     this.input.addEventListener("blur", () => this.closeDropdown());
