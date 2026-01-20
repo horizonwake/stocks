@@ -1,5 +1,6 @@
 import { CardComponent } from "../card.js";
 import format from "../../../utils/format.js";
+import { externalLinkIcon } from "../../../utils/icons.js";
 export function renderCompanyProfile(data) {
   const container = document.getElementById("cards-container");
 
@@ -12,7 +13,7 @@ export function renderCompanyProfile(data) {
     : "";
   const industry = data?.sicDescription
     ? `<p><strong>Industry:</strong> ${format.toTitleCase(
-        data?.sicDescription
+        data?.sicDescription,
       )}</p>`
     : "";
   const html = `
@@ -27,17 +28,14 @@ export function renderCompanyProfile(data) {
         data.homepageUrl
       }" target="_blank" rel="noopener noreferrer" aria-label="Visit ${
         data?.ticker
-      } company website">${data.homepageUrl.replace(
-        /^https?:\/\//,
-        ""
-      )}</a></p>`
+      } company website" class="external-link">${data.homepageUrl.replace(/^https?:\/\//, "")}${externalLinkIcon}</a></p>`
     : "";
   container.append(
     new CardComponent(
       "Company Profile",
       "company-overview",
       html,
-      footerContent
-    ).render()
+      footerContent,
+    ).render(),
   );
 }

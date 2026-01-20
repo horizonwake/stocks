@@ -1,2 +1,5 @@
-/* Company Profile Card Styles */
-/* Currently uses shared .card, .card-header, .card-footer styles from main.css */
+.external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
