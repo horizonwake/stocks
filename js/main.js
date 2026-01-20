@@ -46,11 +46,27 @@ async function renderStockOverview(ticker, initialComparisonSymbols = null) {
   const container = document.getElementById("cards-container");
   container.innerHTML = "";
   try {
-    const info = await getTickerOverview(ticker.toUpperCase());
-    const news = await getNewsForTicker(
-      ticker.toUpperCase(),
-      NEWS_CONFIG.MAIN_PAGE_LIMIT
-    );
+    let info, news;
+
+    try {
+      info = await getTickerOverview(ticker.toUpperCase());
+    } catch (error) {
+      if (error.message && error.message.includes("429")) {
+        container.innerHTML = `<p class="error">Too many requests. Please try again in a minute.</p>`;
+        return;
+      }
+      throw error;
+    }
+
+    try {
+      news = await getNewsForTicker(
+        ticker.toUpperCase(),
+        NEWS_CONFIG.MAIN_PAGE_LIMIT,
+      );
+    } catch (error) {
+      console.error("Error loading news:", error);
+      news = [];
+    }
     const baseUrl = API_CONFIG.baseUrl;
 
     const logoUrl = info.branding?.logo_url
@@ -92,7 +108,7 @@ async function renderStockOverview(ticker, initialComparisonSymbols = null) {
         "cards-container",
         info.ticker,
         SearchBar,
-        initialComparisonSymbols
+        initialComparisonSymbols,
       );
       renderCompanyProfile(info);
       renderNewsCard(news, info.ticker);

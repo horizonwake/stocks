@@ -17,7 +17,7 @@ export class SearchBar {
   init() {
     if (!this.input) {
       console.error(
-        `SearchBar: Input element not found for selector: ${this.inputSelector}`
+        `SearchBar: Input element not found for selector: ${this.inputSelector}`,
       );
       return;
     }
@@ -73,7 +73,7 @@ export class SearchBar {
         e.preventDefault();
         this.selectedIndex = Math.min(
           this.selectedIndex + 1,
-          this.results.length - 1
+          this.results.length - 1,
         );
         this.updateSelection();
         break;
@@ -104,7 +104,7 @@ export class SearchBar {
         item.setAttribute("aria-selected", "true");
         this.input.setAttribute(
           "aria-activedescendant",
-          `search-result-${index}`
+          `search-result-${index}`,
         );
       } else {
         item.classList.remove("selected");
@@ -144,8 +144,14 @@ export class SearchBar {
       this.renderResults(this.results);
     } catch (error) {
       console.error("Search error:", error);
-      this.dropdown.innerHTML =
-        '<div class="search-error">Error loading results</div>';
+
+      if (error.message && error.message.includes("429")) {
+        this.dropdown.innerHTML =
+          '<div class="search-error">Too many requests. Please try again after one minute.</div>';
+      } else {
+        this.dropdown.innerHTML =
+          '<div class="search-error">Error loading results</div>';
+      }
     }
   }
 
